@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewBag.Title = "Mejorado";
+}
+
+<h2>SquareGame</h2>
+
+<script type="text/javascript">
+
+    var PosInicial = "";
+    var MovValidos = new Array();
+    //Diccionario de movimientos válidos para el caballo de ajedrez
+
+    MovValidos["a8"] = ["c7", "b6"];
+    MovValidos["a7"] = ["c8", "c6","b5"];
+    MovValidos["a6"] = ["b8", "c7", "c5", "b4"];
+    MovValidos["a5"] = ["b7", "c6", "c4", "b3"];
+    MovValidos["a4"] = ["b6", "c5", "c3", "b2"];
+    MovValidos["a3"] = ["b5", "c4", "c2", "b1"];
+    MovValidos["a2"] = ["b4", "c3", "c1"];
+    MovValidos["a1"] = ["b3", "c2"];
+
+    MovValidos["b8"] = ["a6", "c6", "d7"];
+    MovValidos["b7"] = ["a5", "c5", "d6", "d8"];
+    MovValidos["b6"] = ["a4", "c4", "d5", "d7", "c8", "a8"];
+    MovValidos["b5"] = ["a3", "c3", "d4", "d6", "c7", "a7"];
+    MovValidos["b4"] = ["a2", "c2", "d3", "d5", "c6", "a6"];
+    MovValidos["b3"] = ["a1", "c2", "d2", "d4", "c5", "a5"];
+    MovValidos["b2"] = ["d1", "d3", "c4", "a4"];
+    MovValidos["b1"] = ["a3", "c3", "d2"];
+
+    MovValidos["c8"] = ["a7", "e7", "b6", "d6"];
+    MovValidos["c7"] = ["a6", "a6", "b5", "d5", "e6", "a8"];
+    MovValidos["c6"] = ["a5", "b4", "d4", "e5", "e7", "d8", "b8", "a7"];
+    MovValidos["c5"] = ["a4", "b3", "d3", "e4", "e6", "d7", "b7", "a6"];
+    MovValidos["c4"] = ["a3", "b2", "d2", "e3", "e5", "d6", "b6", "a5"];
+    MovValidos["c3"] = ["a2", "b1", "d1", "e2", "e4", "d5", "b5", "a4"];
+    MovValidos["c2"] = ["a1", "e1", "e3", "d4", "b4", "a3"];
+    MovValidos["c1"] = ["a2", "e2", "d3", "b3"];
+
+    MovValidos["d8"] = ["b7", "c6", "e6", "f7"];
+    MovValidos["d7"] = ["b8", "b6", "c5", "e5", "f6", "f8"];
+    MovValidos["d6"] = ["c8", "b7", "b5", "c4", "e4", "f5", "f7", "e8"];
+    MovValidos["d5"] = ["c7", "b6", "b4", "c3", "e3", "f4", "f6", "e7"];
+    MovValidos["d4"] = ["c6", "b5", "b3", "c2", "e2", "f3", "f5", "e6"];
+    MovValidos["d3"] = ["c5", "b4", "b2", "c1", "e1", "f2", "f4", "e5"];
+    MovValidos["d2"] = ["c4", "b3", "b1", "f1", "f3", "e4"];
+    MovValidos["d1"] = ["c3", "b2", "f2", "e3"];
+
+    MovValidos["e8"] = ["c7", "d6", "f6", "g7"];
+    MovValidos["e7"] = ["c8", "c6", "d5", "f5", "g6", "g8"];
+    MovValidos["e6"] = ["d8", "c7", "c5", "d4", "f4", "g5", "g7", "f8"];
+    MovValidos["e5"] = ["d7", "c6", "c4", "d3", "f3", "g4", "g6", "f7"];
+    MovValidos["e4"] = ["d6", "c5", "c3", "d2", "f2", "g3", "g5", "f6"];
+    MovValidos["e3"] = ["d5", "c4", "c2", "d1", "f1", "g2", "g4", "f5"];
+    MovValidos["e2"] = ["d4", "c3", "c1", "g1", "g3", "f4"];
+    MovValidos["e1"] = ["d3", "c2", "g2", "f3"];
+
+    MovValidos["f8"] = ["d7", "e6", "g6", "h7"];
+    MovValidos["f7"] = ["d8", "d6", "e5", "g5", "h6", "h8"];
+    MovValidos["f6"] = ["e8", "d7", "d5", "e4", "g4", "h5", "h7", "g8"];
+    MovValidos["f5"] = ["e7", "d6", "d4", "e3", "g3", "h4", "h6", "g7"];
+    MovValidos["f4"] = ["e6", "d5", "d3", "e2", "g2", "h3", "h5", "g6"];
+    MovValidos["f3"] = ["e5", "d4", "d2", "e1", "g1", "h2", "h4", "g5"];
+    MovValidos["f2"] = ["e4", "d3", "d1", "h1", "h3", "g4"];
+    MovValidos["f1"] = ["e3", "d2", "h2", "g3"];
+
+    MovValidos["g8"] = ["e7", "f6", "h6"];
+    MovValidos["g7"] = ["e8", "e6", "f5", "h5"];
+    MovValidos["g6"] = ["f8", "e7", "e5", "f4", "h4", "h8"];
+    MovValidos["g5"] = ["f7", "e6", "e4", "f3", "h3", "h7",];
+    MovValidos["g4"] = ["f6", "e5", "e3", "f2", "h2", "h6",];
+    MovValidos["g3"] = ["f5", "e4", "e2", "f1", "h1", "h5",];
+    MovValidos["g2"] = ["f4", "e3", "e1", "h4",];
+    MovValidos["g1"] = ["f3", "e2", "h3",];
+
+    MovValidos["h8"] = ["f7", "g6"];
+    MovValidos["h7"] = ["f8", "f6", "g5"];
+    MovValidos["h6"] = ["g8", "f7", "f5", "g4"];
+    MovValidos["h5"] = ["g7", "f6", "f4", "g3"];
+    MovValidos["h4"] = ["g6", "f5", "f3", "g2"];
+    MovValidos["h3"] = ["g5", "f4", "f2", "g1"];
+    MovValidos["h2"] = ["g4", "f3", "f1"];
+    MovValidos["h1"] = ["g3", "f2"];
+    //END - Diccionario de movimientos validos
+
+
+    //Función para reconocer el click en una casilla
+    $(document).ready(function () {
+        $(".board-square").click(function (e) {
+            if (PosInicial == "") {
+                Inicio(e.target.id);
+            }
+            else {
+                ValidaMov(e.target.id);
+            }
+        });
+    });
+
+    //Función para marcar la casilla inicial
+    function Inicio(pos) {
+            PosInicial = pos;
+            $("#" + pos).html('<img src="/Img/caballo.png" class="responsive" width="20"/>');        
+    }
+
+    //Función para reconocer un movimiento válido
+    function ValidaMov(pos) {
+        if (PosInicial != "") {
+            if (MovValidos[PosInicial].includes(pos)) {
+                $("#" + pos).css('background-color', 'green');
+            }
+            else {
+                $("#" + pos).css('background-color', 'red');
+            }
+        }
+    }
+
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 board">
+            <div class="row board-row">
+                <div class="col-lg-1 board-square white-square" id="a8" onclick=" ">a8</div>
+                <div class="col-lg-1 board-square black-square" id="b8" onclick=" ">b8</div>
+                <div class="col-lg-1 board-square white-square" id="c8" onclick=" ">c8</div>
+                <div class="col-lg-1 board-square black-square" id="d8" onclick=" ">d8</div>
+                <div class="col-lg-1 board-square white-square" id="e8" onclick=" ">e8</div>
+                <div class="col-lg-1 board-square black-square" id="f8" onclick=" ">f8</div>
+                <div class="col-lg-1 board-square white-square" id="g8" onclick=" ">g8</div>
+                <div class="col-lg-1 board-square black-square" id="h8" onclick=" ">h8</div>
+            </div>
+            <div class="row board-row">
+                <div class="col-lg-1 board-square black-square" id="a7" onclick=" ">a7</div>
+                <div class="col-lg-1 board-square white-square" id="b7" onclick=" ">b7</div>
+                <div class="col-lg-1 board-square black-square" id="c7" onclick=" ">c7</div>
+                <div class="col-lg-1 board-square white-square" id="d7" onclick=" ">d7</div>
+                <div class="col-lg-1 board-square black-square" id="e7" onclick=" ">e7</div>
+                <div class="col-lg-1 board-square white-square" id="f7" onclick=" ">f7</div>
+                <div class="col-lg-1 board-square black-square" id="g7" onclick=" ">g7</div>
+                <div class="col-lg-1 board-square white-square" id="h7" onclick=" ">h7</div>
+            </div>
+            <div class="row board-row">
+                <div class="col-lg-1 board-square white-square" id="a6" onclick=" ">a6</div>
+                <div class="col-lg-1 board-square black-square" id="b6" onclick=" ">b6</div>
+                <div class="col-lg-1 board-square white-square" id="c6" onclick=" ">c6</div>
+                <div class="col-lg-1 board-square black-square" id="d6" onclick=" ">d6</div>
+                <div class="col-lg-1 board-square white-square" id="e6" onclick=" ">e6</div>
+                <div class="col-lg-1 board-square black-square" id="f6" onclick=" ">f6</div>
+                <div class="col-lg-1 board-square white-square" id="g6" onclick=" ">g6</div>
+                <div class="col-lg-1 board-square black-square" id="h6" onclick=" ">h6</div>
+            </div>
+            <div class="row board-row">
+                <div class="col-lg-1 board-square black-square" id="a5" onclick=" ">a5</div>
+                <div class="col-lg-1 board-square white-square" id="b5" onclick=" ">b5</div>
+                <div class="col-lg-1 board-square black-square" id="c5" onclick=" ">c5</div>
+                <div class="col-lg-1 board-square white-square" id="d5" onclick=" ">d5</div>
+                <div class="col-lg-1 board-square black-square" id="e5" onclick=" ">e5</div>
+                <div class="col-lg-1 board-square white-square" id="f5" onclick=" ">f5</div>
+                <div class="col-lg-1 board-square black-square" id="g5" onclick=" ">g5</div>
+                <div class="col-lg-1 board-square white-square" id="h5" onclick=" ">h5</div>
+            </div>
+            <div class="row board-row">
+                <div class="col-lg-1 board-square white-square" id="a4" onclick=" ">a4</div>
+                <div class="col-lg-1 board-square black-square" id="b4" onclick=" ">b4</div>
+                <div class="col-lg-1 board-square white-square" id="c4" onclick=" ">c4</div>
+                <div class="col-lg-1 board-square black-square" id="d4" onclick=" ">d4</div>
+                <div class="col-lg-1 board-square white-square" id="e4" onclick=" ">e4</div>
+                <div class="col-lg-1 board-square black-square" id="f4" onclick=" ">f4</div>
+                <div class="col-lg-1 board-square white-square" id="g4" onclick=" ">g4</div>
+                <div class="col-lg-1 board-square black-square" id="h4" onclick=" ">h4</div>
+            </div>
+            <div class="row board-row">
+                <div class="col-lg-1 board-square black-square" id="a3" onclick=" ">a3</div>
+                <div class="col-lg-1 board-square white-square" id="b3" onclick=" ">b3</div>
+                <div class="col-lg-1 board-square black-square" id="c3" onclick=" ">c3</div>
+                <div class="col-lg-1 board-square white-square" id="d3" onclick=" ">d3</div>
+                <div class="col-lg-1 board-square black-square" id="e3" onclick=" ">e3</div>
+                <div class="col-lg-1 board-square white-square" id="f3" onclick=" ">f3</div>
+                <div class="col-lg-1 board-square black-square" id="g3" onclick=" ">g3</div>
+                <div class="col-lg-1 board-square white-square" id="h3" onclick=" ">h3</div>
+            </div>
+            <div class="row board-row">
+                <div class="col-lg-1 board-square white-square" id="a2" onclick=" ">a2</div>
+                <div class="col-lg-1 board-square black-square" id="b2" onclick=" ">b2</div>
+                <div class="col-lg-1 board-square white-square" id="c2" onclick=" ">c2</div>
+                <div class="col-lg-1 board-square black-square" id="d2" onclick=" ">d2</div>
+                <div class="col-lg-1 board-square white-square" id="e2" onclick=" ">e2</div>
+                <div class="col-lg-1 board-square black-square" id="f2" onclick=" ">f2</div>
+                <div class="col-lg-1 board-square white-square" id="g2" onclick=" ">g2</div>
+                <div class="col-lg-1 board-square black-square" id="h2" onclick=" ">h2</div>
+            </div>
+            <div class="row board-row">
+                <div class="col-lg-1 board-square black-square" id="a1" onclick=" ">a1</div>
+                <div class="col-lg-1 board-square white-square" id="b1" onclick=" ">b1</div>
+                <div class="col-lg-1 board-square black-square" id="c1" onclick=" ">c1</div>
+                <div class="col-lg-1 board-square white-square" id="d1" onclick=" ">d1</div>
+                <div class="col-lg-1 board-square black-square" id="e1" onclick=" ">e1</div>
+                <div class="col-lg-1 board-square white-square" id="f1" onclick=" ">f1</div>
+                <div class="col-lg-1 board-square black-square" id="g1" onclick=" ">g1</div>
+                <div class="col-lg-1 board-square white-square" id="h1" onclick=" ">h1</div>
+            </div>
+        </div>
+        <div class="col-lg-2 controls">
+            <div class="panel panel-default">
+                <div class="panel-heading">Controles</div>
+                <div class="panel-body">
+                    <a href="~/Tablero/Mejorado" class="btn btn-default">Reiniciar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
