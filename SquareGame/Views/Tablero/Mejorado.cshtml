@@ -12,7 +12,7 @@
     //Diccionario de movimientos válidos para el caballo de ajedrez
 
     MovValidos["a8"] = ["c7", "b6"];
-    MovValidos["a7"] = ["c8", "c6","b5"];
+    MovValidos["a7"] = ["c8", "c6", "b5"];
     MovValidos["a6"] = ["b8", "c7", "c5", "b4"];
     MovValidos["a5"] = ["b7", "c6", "c4", "b3"];
     MovValidos["a4"] = ["b6", "c5", "c3", "b2"];
@@ -30,7 +30,7 @@
     MovValidos["b1"] = ["a3", "c3", "d2"];
 
     MovValidos["c8"] = ["a7", "e7", "b6", "d6"];
-    MovValidos["c7"] = ["a6", "a6", "b5", "d5", "e6", "a8"];
+    MovValidos["c7"] = ["a8", "a6", "b5", "d5", "e6", "e8"];
     MovValidos["c6"] = ["a5", "b4", "d4", "e5", "e7", "d8", "b8", "a7"];
     MovValidos["c5"] = ["a4", "b3", "d3", "e4", "e6", "d7", "b7", "a6"];
     MovValidos["c4"] = ["a3", "b2", "d2", "e3", "e5", "d6", "b6", "a5"];
@@ -100,7 +100,10 @@
     //Función para marcar la casilla inicial
     function Inicio(pos) {
             PosInicial = pos;
-            $("#" + pos).html('<img src="/Img/caballo.png" class="responsive" width="20"/>');        
+            $("#" + pos).html('<img src="/Img/caballo.png" class="responsive" width="20"/>');
+            $("#NumMovValidos").html(MovValidos[pos].length); 
+
+            
     }
 
     //Función para reconocer un movimiento válido
@@ -114,6 +117,9 @@
             }
         }
     }
+
+    
+    
 
 </script>
 
@@ -207,6 +213,12 @@
                 <div class="panel-body">
                     <a href="~/Tablero/Mejorado" class="btn btn-default">Reiniciar</a>
                 </div>
+                <div id="validos">
+                    <h4> movimientos validos</h4>
+                    <div id="NumMovValidos">
+                        
+                    </div>
+                </div>            
             </div>
         </div>
     </div>
